@@ -1,4 +1,3 @@
-pub mod binary_index_tree;
 pub mod linked_list;
 pub mod multiset;
 pub mod potentiality_unionfind;

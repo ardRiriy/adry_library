@@ -1,3 +1,7 @@
+use std::ops::Neg;
+
+use crate::utils::integer::Integer;
+
 pub trait PotentialMergeOp<T> {
     fn identity() -> T;
     fn merge(a: T, b: T) -> T;
@@ -5,7 +9,7 @@ pub trait PotentialMergeOp<T> {
 }
 
 pub struct DefaultPotentialMergeOp;
-impl<T: num::PrimInt + std::ops::Neg<Output=T>> PotentialMergeOp<T> for DefaultPotentialMergeOp {
+impl<T: Integer + Neg<Output = T>> PotentialMergeOp<T> for DefaultPotentialMergeOp {
     fn identity() -> T {
         T::zero()
     }
@@ -32,7 +36,7 @@ pub struct PotentialityUnionfind<T, F: PotentialMergeOp<T> + Default> {
     merge_op: F,
 }
 
-impl<T: num::PrimInt + std::ops::Neg<Output=T>, F: PotentialMergeOp<T> + Default> PotentialityUnionfind<T, F> {
+impl<T: Integer, F: PotentialMergeOp<T> + Default> PotentialityUnionfind<T, F> {
     pub fn new(size: usize, op: Option<F>) -> Self {
         let op = op.unwrap_or_default();
         Self {

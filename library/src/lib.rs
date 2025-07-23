@@ -1,8 +1,7 @@
 pub mod example;
 pub mod cumulative_sum;
-pub mod prime;
+pub mod math;
 pub mod mink_sum;
-pub mod debug;
 pub mod zeta_mobius_transform;
 pub mod hash;
 pub mod graph;

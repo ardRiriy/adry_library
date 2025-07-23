@@ -1,4 +1,10 @@
 [workspace]
+resolver = "2"
 members = [
     "library",
+    "library-verify-problems/library_checker",
+    "library-verify-problems/aoj",
+]
+exclude = [ 
+  ".verify-helper",
 ]

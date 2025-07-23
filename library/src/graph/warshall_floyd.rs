@@ -1,3 +1,5 @@
+use crate::utils::integer::Integer;
+
 pub trait WFelm<T> 
 where T: Copy
 {
@@ -10,7 +12,7 @@ where T: Copy
 pub struct DefaultWFelm;
 
 impl<T> WFelm<T> for DefaultWFelm
-where T: Copy + num::PrimInt {
+where T: Integer {
     fn min(&self, a: T, b: T) -> T {
         a.min(b)
     }
@@ -24,7 +26,7 @@ where T: Copy + num::PrimInt {
     }
 
     fn infinity(&self) -> T {
-        T::max_value()
+        T::inf()
     }
 
     fn identity(&self) -> T {

@@ -1,4 +1,5 @@
 pub mod chlibs;
 pub mod consts;
 pub mod veclibs;
-pub mod modpow;
+pub mod input;
+pub mod integer;

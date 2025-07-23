@@ -1,0 +1,32 @@
+[package]
+name = "library_checker"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ac-library-rs = "=0.1.1"
+library = { path="../../library" }
+
+[[bin]]
+name = "union-find"
+path = "src/graph/unionfind.rs"
+
+[[bin]]
+name = "shortest-path"
+path = "src/graph/shortest_path.rs"
+
+[[bin]]
+name = "factorize"
+path = "src/number_theory/factorize.rs"
+
+[[bin]]
+name = "a-plus-b"
+path = "src/sample/a_plus_b.rs"
+
+[[bin]]
+name = "many-a-plus-b"
+path = "src/sample/many_a_plus_b.rs"
+
+[[bin]]
+name = "many-a-plus-b-128bit"
+path = "src/sample/many_a_plus_b_128bit.rs"

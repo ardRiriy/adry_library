@@ -1,3 +1,7 @@
+use std::{cmp::Reverse, collections::BinaryHeap};
+
+use crate::utils::integer::Integer;
+
 #[allow(dead_code)]
 pub struct Dijkstra<T> {
     start: usize,
@@ -5,17 +9,17 @@ pub struct Dijkstra<T> {
     from: Vec<Option<usize>>,
 }
 
-impl<T: Copy + num::PrimInt> Dijkstra<T> {
+impl<T: Integer> Dijkstra<T> {
     pub fn new(start: usize, graph: &Vec<Vec<(usize, T)>>) -> Self {
-        let inf = T::max_value() >> 2;
+        let inf = T::inf();
         let v = graph.len();
         let mut distance = vec![inf; v];
         let mut from = vec![None; v];
-        let mut pq = std::collections::BinaryHeap::new();
-        pq.push(std::cmp::Reverse((T::zero(), start, start)));
+        let mut pq = BinaryHeap::new();
+        pq.push(Reverse((T::zero(), start, start)));
 
         let mut left = v; // 辺の本数が多い場合の定数倍改善
-        while let Some(std::cmp::Reverse((cost, pos, f))) = pq.pop() {
+        while let Some(Reverse((cost, pos, f))) = pq.pop() {
             if distance[pos] != inf {
                 continue;
             }
@@ -28,7 +32,7 @@ impl<T: Copy + num::PrimInt> Dijkstra<T> {
 
             for &(ni, w) in &graph[pos] {
                 if distance[ni] == inf {
-                    pq.push(std::cmp::Reverse((w + cost, ni, pos)));
+                    pq.push(Reverse((w + cost, ni, pos)));
                 }
             }
         }

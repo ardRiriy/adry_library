@@ -1,10 +1,12 @@
+use crate::utils::integer::Integer;
+
 #[derive(Debug, Clone)]
 pub struct MultiSet<T, U> {
     map: std::collections::BTreeMap<T, U>,
 }
 
 impl<T, U> MultiSet<T, U> 
-where T: Ord + Copy, U: num::PrimInt + std::ops::AddAssign
+where T: Ord + Copy, U: Integer
 {
     pub fn new() -> Self {
         use std::collections::BTreeMap;

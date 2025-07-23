@@ -1,10 +1,12 @@
+use crate::utils::integer::Integer;
+
 #[derive(Debug)]
 pub struct CumulativeSum<T> {
     sum: Vec<T>
 }
 
 impl<T> CumulativeSum<T> 
-where T: num_traits::Num + Clone + Ord
+where T: Integer
 {
     pub fn new(init_vec: &Vec<T>) -> CumulativeSum<T> {
         let sum = init_vec
