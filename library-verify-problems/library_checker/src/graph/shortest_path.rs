@@ -17,6 +17,5 @@ fn main() {
             .join("\n"));
     } else {
         println!("-1");
-        return;
     }
 }
