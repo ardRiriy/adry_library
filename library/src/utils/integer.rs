@@ -1,13 +1,22 @@
-use std::ops::{Add, AddAssign, Shr, Sub};
+use std::{convert::TryFrom, ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Not, Rem, RemAssign, Shr, Sub, SubAssign}};
 
 pub trait Integer:
     Copy
+    + Default
     + Ord
     + Add<Output = Self>
     + AddAssign
     + Sub<Output = Self>
+    + SubAssign
+    + Mul<Output = Self>
+    + MulAssign
+    + Div<Output = Self>
+    + DivAssign
+    + Rem<Output = Self>
+    + RemAssign
+    + TryFrom<i32>
     + Shr<u32, Output = Self>
-    + Default
+    + Not<Output = Self>
 {
     const MAX: Self;
 
@@ -16,6 +25,11 @@ pub trait Integer:
 
     #[inline(always)]
     fn inf() -> Self { Self::MAX >> 2 }
+
+    #[inline(always)]
+    fn from_i32(val: i32) -> Self {
+        Self::try_from(val).unwrap_or_else(|_| panic!("Cannot convert {} to {}", val, std::any::type_name::<Self>()))
+    }
 }
 
 // 任意の整数プリミティブに実装

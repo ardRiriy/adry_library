@@ -7,3 +7,4 @@ pub mod hash;
 pub mod graph;
 pub mod data_structure;
 pub mod utils;
+pub mod misc;
