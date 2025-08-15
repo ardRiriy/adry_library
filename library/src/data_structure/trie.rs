@@ -44,6 +44,39 @@ impl TrieNode {
             Err(())
         }
     }
+    
+    fn delete_one(&mut self, i: usize, s: &[char]) -> usize {
+        if i == s.len() {
+            if self.accepted_cnt == 0 {
+                return 0;
+            } else {
+                self.accepted_cnt -= 1;
+                return 1;
+            }
+        }
+        
+        let idx = (s[i] as u8 - b'a') as usize;
+        return if let Some(next_node) = self.next[idx].as_mut() {
+            next_node.delete_one(i+1, s)
+        } else {
+            0
+        }
+    }
+    
+    fn delete_all(&mut self, i: usize, s: &[char]) -> usize {
+        if i == s.len() {
+            let res = self.accepted_cnt;
+            self.accepted_cnt = 0;
+            return res;
+        }
+        
+        let idx = (s[i] as u8 - b'a') as usize;
+        return if let Some(next_node) = self.next[idx].as_mut() {
+            next_node.delete_all(i+1, s)
+        } else {
+            0
+        };
+    }
 }
 
 
@@ -73,5 +106,23 @@ impl Trie {
     */
     pub fn search(&self, s: &String) -> Result<usize, ()> {
         self.root.search(0, &s.chars().collect::<Vec<char>>())
+    }
+    
+    
+    /*
+     * 単語Sを削除
+     * is_delete_allなら全て、そうでないなら1つ
+     * 削除できた場合: Ok(削除した個数)
+     * 削除できなかった場合(該当の単語がない場合): Err(())
+     * (|S|)
+     * */
+    pub fn delete(&mut self, s: &String, is_delete_all: bool) -> Result<usize, ()> {
+        let res = if is_delete_all {
+            self.root.delete_all(0, &s.chars().collect::<Vec<char>>())
+        } else {
+            self.root.delete_one(0, &s.chars().collect::<Vec<char>>())
+        };
+        
+        if res == 0 { Err(()) } else { Ok(res) }
     }
 }
