@@ -4,12 +4,16 @@ use crate::math::euclidean::extended_gcd;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Modint<const MOD: u64> {
-    value: u64,
+    pub value: u64,
 }
 
 impl<const MOD: u64> Modint<MOD> {
     pub fn new(value: u64) -> Self {
         Self { value: value % MOD }
+    }
+
+    pub fn raw(value: u64) -> Self {
+        Self { value }
     }
     
     // mod MODにおけるvalの逆元
