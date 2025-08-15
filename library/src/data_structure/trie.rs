@@ -77,6 +77,34 @@ impl TrieNode {
             0
         };
     }
+    
+    fn clean_up(&mut self, i: usize, s: &[char]) -> bool {
+        if i == s.len() {
+            return self.accepted_cnt == 0 && self.next.iter().all(|node| node.is_none());
+        }
+        
+        let idx = (s[i] as u8 - b'a') as usize;
+        if let Some(next_node) = self.next[idx].as_mut() {
+            let ret = next_node.clean_up(i+1, s);
+            if ret {
+                self.next[idx] = None;
+                return self.accepted_cnt == 0 && self.next.iter().all(|node| node.is_none());
+            }
+        }
+        false
+    }
+    
+    fn lcp(&self, i: usize, s: &[char]) -> usize {
+        if i == s.len() {
+            return i;
+        }
+        let idx = (s[i] as u8 - b'a') as usize;
+        if let Some(next_node) = self.next[idx].as_ref() {
+            next_node.lcp(i+1, s)
+        } else {
+            i
+        }
+    }
 }
 
 
@@ -117,12 +145,26 @@ impl Trie {
      * (|S|)
      * */
     pub fn delete(&mut self, s: &String, is_delete_all: bool) -> Result<usize, ()> {
+        let s = &s.chars().collect::<Vec<char>>();
         let res = if is_delete_all {
-            self.root.delete_all(0, &s.chars().collect::<Vec<char>>())
+            self.root.delete_all(0, s)
         } else {
-            self.root.delete_one(0, &s.chars().collect::<Vec<char>>())
+            self.root.delete_one(0, s)
         };
         
-        if res == 0 { Err(()) } else { Ok(res) }
+        if res == 0 { 
+            Err(()) 
+        } else { 
+            self.root.clean_up(0, s);
+            Ok(res) 
+        }
+    }
+    
+    /*
+     * Trieに登録されている文字列の集合とSのLCPを返す
+     * O(|S|)
+     * */
+    pub fn lcp(&self, s: &String) -> usize {
+        self.root.lcp(0, &s.chars().collect::<Vec<char>>())
     }
 }
