@@ -3,3 +3,4 @@ pub mod multiset;
 pub mod potentiality_unionfind;
 pub mod unionfind;
 pub mod segment_tree;
+pub mod trie;
