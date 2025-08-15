@@ -89,7 +89,6 @@ dependencies = [
 name = "library_checker"
 version = "0.1.0"
 dependencies = [
- "ac-library-rs",
  "library",
 ]
 

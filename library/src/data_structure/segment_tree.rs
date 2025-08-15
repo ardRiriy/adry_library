@@ -20,6 +20,16 @@ impl<T: Monoid> SegmentTree<T> {
         Self { n, len, data }
     }
 
+    pub fn from_vec(vec: &Vec<T::S>) -> Self {
+        let len = vec.len();
+        let mut seg = Self::new(len);
+        seg.data[seg.n..][..len].copy_from_slice(&vec);
+        for i in (1..seg.n).rev() {
+            seg.data[i] = T::op(seg.data[i << 1], seg.data[(i << 1) + 1]);
+        }
+        seg
+    }
+
     pub fn set(&mut self, index: usize, value: T::S) {
         assert!(index < self.len);
         let mut cur = index + self.n;

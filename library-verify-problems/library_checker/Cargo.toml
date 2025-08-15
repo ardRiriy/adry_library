@@ -4,12 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ac-library-rs = "=0.1.1"
 library = { path="../../library" }
 
 [[bin]]
 name = "union-find"
-path = "src/graph/unionfind.rs"
+path = "src/data_structure/unionfind.rs"
+
+[[bin]]
+name = "segtree"
+path = "src/data_structure/segtree.rs"
 
 [[bin]]
 name = "shortest-path"
