@@ -55,11 +55,11 @@ where T: Ord + Copy, U: Integer
         self.map.len()
     }
 
-    pub fn iter(&self) -> std::collections::btree_map::Iter<T, U> {
+    pub fn iter(&'_ self) -> std::collections::btree_map::Iter<'_, T, U> {
         self.map.iter()
     }
 
-    pub fn iter_mut(&mut self) -> std::collections::btree_map::IterMut<T, U> {
+    pub fn iter_mut(&'_ mut self) -> std::collections::btree_map::IterMut<'_, T, U> {
         self.map.iter_mut()
     }
 }
