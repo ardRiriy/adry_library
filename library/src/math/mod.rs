@@ -1,2 +1,2 @@
-pub mod prime;
 pub mod euclidean;
+pub mod prime;

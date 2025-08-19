@@ -5,9 +5,15 @@ pub fn prime_factorization(n: u64) -> std::collections::BTreeMap<u64, u64> {
         .output()
     {
         let mut res = std::collections::BTreeMap::new();
-        if n==1 { return res; }
-        
-        let output = String::from_utf8(output.stdout).unwrap().trim_start_matches(&format!("{}: ", n)).trim().to_string();
+        if n == 1 {
+            return res;
+        }
+
+        let output = String::from_utf8(output.stdout)
+            .unwrap()
+            .trim_start_matches(&format!("{}: ", n))
+            .trim()
+            .to_string();
 
         for s in output.split(" ") {
             *res.entry(s.parse::<u64>().unwrap()).or_insert(0) += 1;

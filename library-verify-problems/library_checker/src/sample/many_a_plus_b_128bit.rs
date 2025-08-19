@@ -12,5 +12,11 @@ fn main() {
         })
         .collect();
 
-    println!("{}", res.iter().map(|x| x.to_string()).collect::<Vec<String>>().join("\n"));
+    println!(
+        "{}",
+        res.iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<String>>()
+            .join("\n")
+    );
 }

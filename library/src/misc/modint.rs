@@ -15,10 +15,10 @@ impl<const MOD: u64> Modint<MOD> {
     pub fn raw(value: u64) -> Self {
         Self { value }
     }
-    
+
     // mod MODにおけるvalの逆元
     pub fn inv(val: u64) -> Self {
-        if let Some((x,_,_)) = extended_gcd(val as i128, MOD as i128) {
+        if let Some((x, _, _)) = extended_gcd(val as i128, MOD as i128) {
             Self::new(x as u64)
         } else {
             panic!("No inverse exists for {} in modulo {}", val, MOD);
@@ -47,7 +47,7 @@ impl<const MOD: u64> From<Modint<MOD>> for u64 {
     }
 }
 
-impl<const MOD: u64, Rhs> std::ops::Add<Rhs> for Modint<MOD> 
+impl<const MOD: u64, Rhs> std::ops::Add<Rhs> for Modint<MOD>
 where
     Rhs: Into<u64>,
 {
@@ -102,7 +102,7 @@ where
     }
 }
 
-impl<Rhs, const MOD: u64> std::ops::MulAssign<Rhs> for Modint<MOD> 
+impl<Rhs, const MOD: u64> std::ops::MulAssign<Rhs> for Modint<MOD>
 where
     Rhs: Into<u64>,
 {
@@ -135,13 +135,11 @@ macro_rules! impl_from_prim {
 }
 impl_from_prim!(u8, u16, u32, u64, usize, i8, i16, i32, i64, isize);
 
-
 impl<const MOD: u64> Display for Modint<MOD> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.value)
     }
 }
-
 
 // テスト
 #[cfg(test)]

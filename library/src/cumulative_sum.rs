@@ -2,18 +2,19 @@ use crate::utils::integer::Integer;
 
 #[derive(Debug)]
 pub struct CumulativeSum<T> {
-    sum: Vec<T>
+    sum: Vec<T>,
 }
 
-impl<T> CumulativeSum<T> 
-where T: Integer
+impl<T> CumulativeSum<T>
+where
+    T: Integer,
 {
     pub fn new(init_vec: &Vec<T>) -> CumulativeSum<T> {
         let sum = init_vec
             .iter()
             .enumerate()
             .fold(vec![T::zero()], |mut sum, (idx, x)| {
-                let next :T = sum[idx] + *x;
+                let next: T = sum[idx] + *x;
                 sum.push(next);
                 sum
             });
@@ -23,7 +24,7 @@ where T: Integer
     // 区間[l, r)の総和を答える
     pub fn get<R>(&self, range: R) -> T
     where
-        R: std::ops::RangeBounds<usize>
+        R: std::ops::RangeBounds<usize>,
     {
         let start = match range.start_bound() {
             std::ops::Bound::Included(&s) => s,
@@ -34,7 +35,7 @@ where T: Integer
         let end = match range.end_bound() {
             std::ops::Bound::Included(&e) => e + 1,
             std::ops::Bound::Excluded(&e) => e,
-            std::ops::Bound::Unbounded => self.sum.len()-1,
+            std::ops::Bound::Unbounded => self.sum.len() - 1,
         };
 
         self.sum[end] - self.sum[start]

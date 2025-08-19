@@ -23,7 +23,7 @@ impl<T: Integer> Dijkstra<T> {
             if distance[pos] != inf {
                 continue;
             }
-            from[pos] = Some(f);  
+            from[pos] = Some(f);
             distance[pos] = cost;
             left -= 1;
             if left == 0 {
@@ -36,28 +36,32 @@ impl<T: Integer> Dijkstra<T> {
                 }
             }
         }
-        
+
         from[start] = None; // 実装上戻しておいたほうが都合がいい
 
-        Self { start, from, dist: distance }
+        Self {
+            start,
+            from,
+            dist: distance,
+        }
     }
-    
+
     pub fn get(&self, to: usize) -> T {
         self.dist[to]
     }
-    
+
     pub fn path(&self, to: usize) -> Option<Vec<usize>> {
         self.from[to]?;
-        
+
         let mut res = vec![to];
         let mut cur = to;
-        
+
         while let Some(p) = self.from[cur] {
             res.push(p);
             cur = p;
         }
         res.reverse();
-        
+
         Some(res)
     }
 }

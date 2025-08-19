@@ -68,11 +68,7 @@ impl<T: Integer, F: PotentialMergeOp<T> + Default> PotentialityUnionfind<T, F> {
     // 矛盾する場合はErrを返す
     pub fn merge(&mut self, u: usize, v: usize, w: T) -> Result<T, T> {
         if let Ok(diff) = self.diff(u, v) {
-            return if w == diff {
-                Ok(diff)
-            } else {
-                Err(diff)
-            }
+            return if w == diff { Ok(diff) } else { Err(diff) };
         }
 
         // size(u) >= size(v) となるようにswap
@@ -81,7 +77,10 @@ impl<T: Integer, F: PotentialMergeOp<T> + Default> PotentialityUnionfind<T, F> {
             return Ok(F::invert(w));
         }
 
-        let w_sub = F::merge(w, F::merge(self.diff_weights[u], F::invert(self.diff_weights[v])));
+        let w_sub = F::merge(
+            w,
+            F::merge(self.diff_weights[u], F::invert(self.diff_weights[v])),
+        );
 
         // vの親をuに変更
         let v_leader = self.leader(v);
@@ -90,7 +89,6 @@ impl<T: Integer, F: PotentialMergeOp<T> + Default> PotentialityUnionfind<T, F> {
         self.vertex[v_leader] = u_leader;
         self.diff_weights[v_leader] = w_sub;
         self.vertex[u_leader] = merged_size;
-
 
         Ok(w)
     }
@@ -121,7 +119,8 @@ mod tests {
 
     #[test]
     fn test_potentiality_unionfind() {
-        let mut uf :PotentialityUnionfind<i32, DefaultPotentialMergeOp> = PotentialityUnionfind::new(6, None);
+        let mut uf: PotentialityUnionfind<i32, DefaultPotentialMergeOp> =
+            PotentialityUnionfind::new(6, None);
         assert_eq!(uf.merge(0, 1, 1), Ok(1));
         assert_eq!(uf.merge(1, 2, 3), Ok(3));
         assert_eq!(uf.merge(2, 3, 1), Ok(1));

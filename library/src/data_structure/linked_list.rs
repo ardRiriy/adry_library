@@ -5,11 +5,16 @@ pub struct Item<T> {
     val: Option<T>,
 }
 
-impl<T> Item<T> 
-where T: Copy
+impl<T> Item<T>
+where
+    T: Copy,
 {
     pub fn new(x: Option<T>) -> Self {
-        Item { previous: None, next: None, val: x }
+        Item {
+            previous: None,
+            next: None,
+            val: x,
+        }
     }
 
     // dummy nodeが呼ばれないことを期待
@@ -42,19 +47,25 @@ pub struct LinkedList<T> {
 }
 
 impl<T> Default for LinkedList<T>
-where T: Copy
- {
+where
+    T: Copy,
+{
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> 
-where T: Copy
+impl<T> LinkedList<T>
+where
+    T: Copy,
 {
     pub fn new() -> Self {
         let dummy = Item::new(None);
-        LinkedList { vec: vec![dummy], head: 0, tail: 0 }
+        LinkedList {
+            vec: vec![dummy],
+            head: 0,
+            tail: 0,
+        }
     }
 
     // idxの後ろに要素を差し込み後、生成されたNodeのindexを返却
@@ -91,7 +102,7 @@ where T: Copy
     // idx番のnodeを削除する(といいつつ、実際には消さないのでMLEには注意)
     pub fn delete(&mut self, idx: usize) {
         let deleted_node = self.vec[idx];
-        
+
         // 前の処理
         if let Some(i) = deleted_node.previous() {
             self.vec[i].update_next(deleted_node.next());

@@ -1,15 +1,16 @@
 use std::iter::Peekable;
 
-pub struct Rle<I: Iterator> { 
-    iter: Peekable<I>
+pub struct Rle<I: Iterator> {
+    iter: Peekable<I>,
 }
 
-impl<I> Iterator for Rle<I> 
-where I: Iterator,
-      I::Item: PartialEq,
+impl<I> Iterator for Rle<I>
+where
+    I: Iterator,
+    I::Item: PartialEq,
 {
     type Item = (usize, I::Item);
-    
+
     fn next(&mut self) -> Option<Self::Item> {
         let mut len = 1;
         let val = self.iter.next()?;
@@ -28,11 +29,13 @@ where I: Iterator,
 
 pub trait RleItertor: Iterator + Sized {
     fn rle(self) -> Rle<Self>
-    where Self::Item: PartialEq,
+    where
+        Self::Item: PartialEq,
     {
-        Rle { iter: self.peekable() }
+        Rle {
+            iter: self.peekable(),
+        }
     }
-    
 }
 
 impl<I: Iterator> RleItertor for I {}
@@ -60,9 +63,7 @@ pub trait DedupIterator: Iterator + Sized {
     where
         Self::Item: PartialEq,
     {
-        Dedup {
-            inner: self.rle(),
-        }
+        Dedup { inner: self.rle() }
     }
 }
 impl<I: Iterator> DedupIterator for I {}

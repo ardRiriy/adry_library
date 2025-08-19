@@ -1,6 +1,7 @@
 #[derive(Debug)]
 pub struct UnionFind<T, F>
-where F: Fn(&T, &T) -> T,
+where
+    F: Fn(&T, &T) -> T,
 {
     vertex: Vec<usize>,
     data: Vec<Option<T>>,
@@ -10,7 +11,7 @@ where F: Fn(&T, &T) -> T,
 impl<T: Clone, F: Fn(&T, &T) -> T> UnionFind<T, F> {
     pub fn new(size: usize, merge_op: F) -> Self {
         UnionFind {
-            vertex: vec![!1; size] ,
+            vertex: vec![!1; size],
             data: vec![None; size],
             merge_op,
         }
@@ -56,7 +57,9 @@ impl<T: Clone, F: Fn(&T, &T) -> T> UnionFind<T, F> {
             self.data[v_leader] = match (&self.data[u_leader], &self.data[v_leader]) {
                 (Some(du), Some(dv)) => Some((self.merge_op)(du, dv)),
                 (None, None) => None,
-                _ => { unreachable!(); }
+                _ => {
+                    unreachable!();
+                }
             };
         } else {
             self.vertex[u_leader] = merged_size;
@@ -65,7 +68,9 @@ impl<T: Clone, F: Fn(&T, &T) -> T> UnionFind<T, F> {
             self.data[u_leader] = match (&self.data[u_leader], &self.data[v_leader]) {
                 (Some(du), Some(dv)) => Some((self.merge_op)(du, dv)),
                 (None, None) => None,
-                _ => { unreachable!(); }
+                _ => {
+                    unreachable!();
+                }
             };
         }
 
@@ -81,5 +86,4 @@ impl<T: Clone, F: Fn(&T, &T) -> T> UnionFind<T, F> {
         let root = self.leader(u);
         self.data[root].as_ref()
     }
-
 }

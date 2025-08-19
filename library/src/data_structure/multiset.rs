@@ -6,19 +6,25 @@ pub struct MultiSet<T, U> {
 }
 
 impl<T, U> Default for MultiSet<T, U>
-where T: Ord + Copy, U: Integer
- {
+where
+    T: Ord + Copy,
+    U: Integer,
+{
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T, U> MultiSet<T, U> 
-where T: Ord + Copy, U: Integer
+impl<T, U> MultiSet<T, U>
+where
+    T: Ord + Copy,
+    U: Integer,
 {
     pub fn new() -> Self {
         use std::collections::BTreeMap;
-        MultiSet { map: BTreeMap::new() }
+        MultiSet {
+            map: BTreeMap::new(),
+        }
     }
 
     /* keyをsizeだけ増やして新しい値を返す */
@@ -49,7 +55,7 @@ where T: Ord + Copy, U: Integer
 
     pub fn min_key(&self) -> Option<(&T, &U)> {
         self.map.first_key_value()
-    } 
+    }
 
     pub fn get(&self, key: T) -> Option<U> {
         if let Some(&v) = self.map.get(&key) {

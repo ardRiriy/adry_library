@@ -29,6 +29,4 @@
 //     println!("{} {}", sum, pf.iter().map(|(k, v)| repeat(*k).take(*v as usize).join(" ")).join(" "));
 // }
 
-fn main() {
-    
-}
+fn main() {}

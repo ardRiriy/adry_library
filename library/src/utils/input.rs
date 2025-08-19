@@ -1,4 +1,4 @@
-use std::{str::{from_utf8, FromStr}};
+use std::str::{from_utf8, FromStr};
 
 pub struct Input {
     buf: Vec<u8>,
@@ -27,11 +27,13 @@ impl Input {
         while self.pos < self.buf.len() && !self.buf[self.pos].is_ascii_whitespace() {
             self.pos += 1;
         }
-        
+
         if start == self.pos {
             // ioを追加で読む
             let mut input = String::new();
-            std::io::stdin().read_line(&mut input).expect("Failed to read line");
+            std::io::stdin()
+                .read_line(&mut input)
+                .expect("Failed to read line");
             self.buf.clear();
             self.buf.extend(input.as_bytes());
             self.pos = 0;
@@ -42,8 +44,12 @@ impl Input {
             .unwrap()
             .parse::<T>()
             .ok()
-            .unwrap_or_else(|| panic!("Failed to parse input: {}",
-                from_utf8(&self.buf[start..self.pos]).unwrap()))
+            .unwrap_or_else(|| {
+                panic!(
+                    "Failed to parse input: {}",
+                    from_utf8(&self.buf[start..self.pos]).unwrap()
+                )
+            })
     }
 
     #[allow(non_snake_case)]

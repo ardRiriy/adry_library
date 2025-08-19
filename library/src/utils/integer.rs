@@ -1,4 +1,9 @@
-use std::{convert::TryFrom, ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Not, Rem, RemAssign, Shr, Sub, SubAssign}};
+use std::{
+    convert::TryFrom,
+    ops::{
+        Add, AddAssign, Div, DivAssign, Mul, MulAssign, Not, Rem, RemAssign, Shr, Sub, SubAssign,
+    },
+};
 
 pub trait Integer:
     Copy
@@ -21,14 +26,24 @@ pub trait Integer:
     const MAX: Self;
 
     #[inline(always)]
-    fn zero() -> Self { Self::default() }
+    fn zero() -> Self {
+        Self::default()
+    }
 
     #[inline(always)]
-    fn inf() -> Self { Self::MAX >> 2 }
+    fn inf() -> Self {
+        Self::MAX >> 2
+    }
 
     #[inline(always)]
     fn from_i32(val: i32) -> Self {
-        Self::try_from(val).unwrap_or_else(|_| panic!("Cannot convert {} to {}", val, std::any::type_name::<Self>()))
+        Self::try_from(val).unwrap_or_else(|_| {
+            panic!(
+                "Cannot convert {} to {}",
+                val,
+                std::any::type_name::<Self>()
+            )
+        })
     }
 }
 
@@ -37,5 +52,4 @@ macro_rules! impl_int {
     ($($t:ty),*) => { $( impl Integer for $t { const MAX: Self = <$t>::MAX; } )* };
 }
 
-impl_int!(u8, u16, u32, u64, u128, usize,
-          i8, i16, i32, i64, i128, isize);
+impl_int!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);

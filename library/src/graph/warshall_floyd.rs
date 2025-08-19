@@ -1,7 +1,8 @@
 use crate::utils::integer::Integer;
 
-pub trait WFelm<T> 
-where T: Copy
+pub trait WFelm<T>
+where
+    T: Copy,
 {
     fn min(&self, a: T, b: T) -> T; // コストが軽い方を返却
     fn add(&self, a: T, b: T) -> T; // コストの合算を計算
@@ -12,7 +13,9 @@ where T: Copy
 pub struct DefaultWFelm;
 
 impl<T> WFelm<T> for DefaultWFelm
-where T: Integer {
+where
+    T: Integer,
+{
     fn min(&self, a: T, b: T) -> T {
         a.min(b)
     }
@@ -51,14 +54,14 @@ where
     pub fn new(graph: &Vec<Vec<(usize, T)>>, op: O) -> Self {
         let n = graph.len();
         let mut dist = vec![vec![op.infinity(); n]; n];
-        
+
         for i in 0..n {
             for (to, cost) in graph[i].iter() {
                 dist[i][*to] = op.min(dist[i][*to], *cost);
             }
             dist[i][i] = op.identity();
         }
-        
+
         for k in 0..n {
             for i in 0..n {
                 for j in 0..n {
@@ -66,24 +69,26 @@ where
                 }
             }
         }
-        
+
         Self { dist, op }
     }
-    
+
     pub fn get(&self, from: usize, to: usize) -> T {
         self.dist[from][to]
     }
-    
+
     pub fn add(&mut self, x: usize, y: usize, w: T) {
         self.dist[x][y] = self.op.min(self.dist[x][y], w);
         //self.dist[y][x] = self.op.min(self.dist[y][x], w);
         for &k in &[x, y] {
             for i in 0..self.dist.len() {
                 for j in 0..self.dist.len() {
-                    self.dist[i][j] = self.op.min(self.dist[i][j], self.op.add(self.dist[i][k], self.dist[k][j]));
+                    self.dist[i][j] = self.op.min(
+                        self.dist[i][j],
+                        self.op.add(self.dist[i][k], self.dist[k][j]),
+                    );
                 }
             }
         }
     }
 }
-

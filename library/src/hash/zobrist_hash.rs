@@ -13,10 +13,10 @@ impl<T: Ord> Default for ZobristHash<T> {
 
 impl<T: Ord> ZobristHash<T> {
     pub fn new() -> Self {
-        use std::collections::*;
         use rand::thread_rng;
-        Self { 
-            map: BTreeMap::new(), 
+        use std::collections::*;
+        Self {
+            map: BTreeMap::new(),
             set: BTreeSet::new(),
             rng: thread_rng(),
         }

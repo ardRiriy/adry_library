@@ -5,8 +5,8 @@ use std::io::Write;
 
 fn main() {
     let mut input = Input::new();
-    let (n, q) = input.pair::<usize,usize>();
-    let mut uf = UnionFind::new(n, |_u, _v| { 0 });
+    let (n, q) = input.pair::<usize, usize>();
+    let mut uf = UnionFind::new(n, |_u, _v| 0);
 
     for _ in 0..q {
         let (t, u, v) = input.triple::<usize, usize, usize>();

@@ -26,7 +26,6 @@ impl MinK {
         self.cnt += 1;
         self.sum_small_k += x;
 
-
         if self.cnt > self.k {
             let (&key, _) = self.small_k_map.last_key_value().unwrap();
             // 大きい方から管理したい場合は↓を使う
@@ -46,7 +45,8 @@ impl MinK {
             remove_from_map(&mut self.small_k_map, x);
             self.sum_small_k -= x;
 
-            if let Some((&key, _)) = self.big_map.first_key_value() { // 大きい方からK個を管理したい場合は、last_key_value()に書き換える
+            if let Some((&key, _)) = self.big_map.first_key_value() {
+                // 大きい方からK個を管理したい場合は、last_key_value()に書き換える
                 *self.small_k_map.entry(key).or_insert(0) += 1;
                 remove_from_map(&mut self.big_map, key);
                 self.sum_small_k += key;
@@ -99,7 +99,6 @@ impl MaxK {
         self.cnt += 1;
         self.sum_small_k += x;
 
-
         if self.cnt > self.k {
             // let (&key, _) = self.small_k_map.last_key_value().unwrap();
             // 大きい方から管理したい場合は↓を使う
@@ -119,7 +118,8 @@ impl MaxK {
             remove_from_map(&mut self.small_k_map, x);
             self.sum_small_k -= x;
 
-            if let Some((&key, _)) = self.big_map.last_key_value() { // 大きい方からK個を管理したい場合は、last_key_value()に書き換える
+            if let Some((&key, _)) = self.big_map.last_key_value() {
+                // 大きい方からK個を管理したい場合は、last_key_value()に書き換える
                 *self.small_k_map.entry(key).or_insert(0) += 1;
                 remove_from_map(&mut self.big_map, key);
                 self.sum_small_k += key;

@@ -1,4 +1,7 @@
-use std::{fmt::{self, Debug, Formatter}, ops::{Bound, RangeBounds}};
+use std::{
+    fmt::{self, Debug, Formatter},
+    ops::{Bound, RangeBounds},
+};
 
 pub trait Monoid {
     type S: Copy;
@@ -15,7 +18,9 @@ pub struct SegmentTree<T: Monoid> {
 impl<T: Monoid> SegmentTree<T> {
     pub fn new(len: usize) -> Self {
         let mut n = 1;
-        while n < len { n <<= 1; }
+        while n < len {
+            n <<= 1;
+        }
         let data = vec![T::id(); 2 * n];
         Self { n, len, data }
     }
@@ -47,24 +52,26 @@ impl<T: Monoid> SegmentTree<T> {
         let l = match range.start_bound() {
             Bound::Included(&s) => s,
             Bound::Excluded(&s) => s + 1,
-            Bound::Unbounded    => 0,
+            Bound::Unbounded => 0,
         };
         let r = match range.end_bound() {
             Bound::Included(&e) => e + 1,
             Bound::Excluded(&e) => e,
-            Bound::Unbounded    => self.len,
+            Bound::Unbounded => self.len,
         };
         self.get_rec(1, 0, self.n, l, r)
     }
 
-    fn get_rec(&self, cur: usize, seg_l: usize, seg_r: usize,
-               q_l: usize, q_r: usize) -> T::S
-    {
-        if seg_r <= q_l || q_r <= seg_l { return T::id(); }
-        if q_l <= seg_l && seg_r <= q_r { return self.data[cur]; }
+    fn get_rec(&self, cur: usize, seg_l: usize, seg_r: usize, q_l: usize, q_r: usize) -> T::S {
+        if seg_r <= q_l || q_r <= seg_l {
+            return T::id();
+        }
+        if q_l <= seg_l && seg_r <= q_r {
+            return self.data[cur];
+        }
         let mid = (seg_l + seg_r) >> 1;
-        let left  = self.get_rec(cur << 1,     seg_l, mid, q_l, q_r);
-        let right = self.get_rec((cur << 1)+1, mid,   seg_r, q_l, q_r);
+        let left = self.get_rec(cur << 1, seg_l, mid, q_l, q_r);
+        let right = self.get_rec((cur << 1) + 1, mid, seg_r, q_l, q_r);
         T::op(left, right)
     }
 }
@@ -85,12 +92,13 @@ where
         debug_assert!(leaves.is_power_of_two());
         let h = leaves.trailing_zeros() as usize;
 
-        let repr: Vec<String> = self.data
+        let repr: Vec<String> = self
+            .data
             .iter()
             .skip(1)
             .map(|v| format!("{:?}", v))
             .collect();
-        let w  = repr.iter().map(|s| s.len()).max().unwrap();
+        let w = repr.iter().map(|s| s.len()).max().unwrap();
         let sep = 1;
         let unit = w + sep;
         let line_len = leaves * unit - sep;
@@ -103,14 +111,18 @@ where
             let mut line = vec![' '; line_len];
 
             for i in 0..nodes {
-                if idx >= repr.len() { break; }
+                if idx >= repr.len() {
+                    break;
+                }
                 let s = &repr[idx];
                 let center = i * stride + stride / 2;
-                let start  = center - s.len() / 2;
+                let start = center - s.len() / 2;
 
                 for (j, ch) in s.chars().enumerate() {
                     let pos = start + j;
-                    if pos < line_len { line[pos] = ch; }
+                    if pos < line_len {
+                        line[pos] = ch;
+                    }
                 }
                 idx += 1;
             }
