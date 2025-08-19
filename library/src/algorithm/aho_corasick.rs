@@ -1,5 +1,8 @@
 use std::collections::{HashMap, VecDeque};
 
+use crate::utils::iterlibs::dedup::DedupIterator;
+
+#[derive(Debug, Clone)]
 struct Node {
     children: HashMap<char, usize>,
     failure: usize,
@@ -61,6 +64,7 @@ impl AhoCorasick {
 
         while let Some(cur) = que.pop_front() {
             for (&ch, &child) in &self.nodes[cur].children.clone() {
+                que.push_back(child);
                 let mut failure_node = self.nodes[cur].failure;
                 while failure_node != 0 && !self.nodes[failure_node].children.contains_key(&ch) {
                     failure_node = self.nodes[failure_node].failure;
@@ -97,5 +101,33 @@ impl AhoCorasick {
             }
         }
         res
+    }    
+    
+    /* sのsuffixに続く(root node以外へ)遷移する文字の一覧を返す */
+    pub fn destination(&self, s: &String) -> Vec<char> {
+        let mut res = Vec::new();
+        let mut cur = 0;
+        
+        for ch in s.chars() {
+            while cur != 0 && !self.nodes[cur].children.contains_key(&ch) {
+                cur = self.nodes[cur].failure;
+            }
+
+            if let Some(&nxt) = self.nodes[cur].children.get(&ch) {
+                cur = nxt;
+            } else {
+                continue; // 遷移できない場合はスキップ
+            }
+        }
+        
+        while cur != 0 {
+            for ch in self.nodes[cur].children.keys() {
+                res.push(*ch);
+            }
+            cur = self.nodes[cur].failure;
+        }
+
+        return res.iter().dedup().copied().collect();
     }
+
 }
