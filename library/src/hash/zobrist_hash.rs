@@ -5,6 +5,12 @@ pub struct ZobristHash<T> {
     rng: rand::rngs::ThreadRng,
 }
 
+impl<T: Ord> Default for ZobristHash<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: Ord> ZobristHash<T> {
     pub fn new() -> Self {
         use std::collections::*;
@@ -19,7 +25,7 @@ impl<T: Ord> ZobristHash<T> {
     pub fn get(&mut self, key: T) -> u64 {
         use rand::Rng;
         if let Some(val) = self.map.get(&key) {
-            return *val;
+            *val
         } else {
             let mut val = self.rng.gen_range(0..=MOD);
             while self.set.contains(&val) {
@@ -27,7 +33,7 @@ impl<T: Ord> ZobristHash<T> {
             }
             self.map.insert(key, val);
             self.set.insert(val);
-            return val;
+            val
         }
     }
 }

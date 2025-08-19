@@ -47,9 +47,7 @@ impl<T: Integer> Dijkstra<T> {
     }
     
     pub fn path(&self, to: usize) -> Option<Vec<usize>> {
-        if self.from[to].is_none() {
-            return None;
-        }
+        self.from[to]?;
         
         let mut res = vec![to];
         let mut cur = to;

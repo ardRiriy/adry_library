@@ -23,7 +23,7 @@ impl<T: Monoid> SegmentTree<T> {
     pub fn from_vec(vec: &Vec<T::S>) -> Self {
         let len = vec.len();
         let mut seg = Self::new(len);
-        seg.data[seg.n..][..len].copy_from_slice(&vec);
+        seg.data[seg.n..][..len].copy_from_slice(vec);
         for i in (1..seg.n).rev() {
             seg.data[i] = T::op(seg.data[i << 1], seg.data[(i << 1) + 1]);
         }
@@ -75,13 +75,13 @@ where
     T::S: Debug,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        writeln!(f, "")?;
+        writeln!(f)?;
         let total = self.data.len() - 1;
         if total == 0 {
             return write!(f, "(empty)");
         }
 
-        let leaves = (total + 1) / 2;
+        let leaves = total.div_ceil(2);
         debug_assert!(leaves.is_power_of_two());
         let h = leaves.trailing_zeros() as usize;
 

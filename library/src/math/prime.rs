@@ -1,6 +1,6 @@
 // 素因数分解
 pub fn prime_factorization(n: u64) -> std::collections::BTreeMap<u64, u64> {
-    return if let Ok(output) = std::process::Command::new("factor")
+    if let Ok(output) = std::process::Command::new("factor")
         .arg(n.to_string())
         .output()
     {
@@ -35,7 +35,7 @@ pub fn prime_factorization(n: u64) -> std::collections::BTreeMap<u64, u64> {
             res.insert(k, 1);
         }
         res
-    };
+    }
 }
 
 /* nまでの素数を生成して配列で返す */

@@ -13,7 +13,7 @@ where T: Integer
             .iter()
             .enumerate()
             .fold(vec![T::zero()], |mut sum, (idx, x)| {
-                let next :T = sum[idx].clone() + x.clone();
+                let next :T = sum[idx] + *x;
                 sum.push(next);
                 sum
             });
@@ -37,7 +37,7 @@ where T: Integer
             std::ops::Bound::Unbounded => self.sum.len()-1,
         };
 
-        self.sum[end].clone() - self.sum[start].clone()
+        self.sum[end] - self.sum[start]
     }
 
     // key以上で最小のindexを返却する

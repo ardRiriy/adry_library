@@ -41,9 +41,9 @@ impl<const MOD: u64> Modint<MOD> {
     }
 }
 
-impl<const MOD: u64> Into<u64> for Modint<MOD> {
-    fn into(self) -> u64 {
-        self.value
+impl<const MOD: u64> From<Modint<MOD>> for u64 {
+    fn from(val: Modint<MOD>) -> Self {
+        val.value
     }
 }
 

@@ -5,6 +5,14 @@ pub struct MultiSet<T, U> {
     map: std::collections::BTreeMap<T, U>,
 }
 
+impl<T, U> Default for MultiSet<T, U>
+where T: Ord + Copy, U: Integer
+ {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T, U> MultiSet<T, U> 
 where T: Ord + Copy, U: Integer
 {

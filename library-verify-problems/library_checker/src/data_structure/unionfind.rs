@@ -13,7 +13,7 @@ fn main() {
         if t == 0 {
             uf.merge(u, v);
         } else {
-            writeln!(std::io::stdout(), "{}", if uf.same(u, v) { "1" } else { "0" }).unwrap();
+            println!("{}", if uf.same(u, v) { "1" } else { "0" });
         }
     }
 }

@@ -5,6 +5,12 @@ pub struct Input {
     pos: usize,
 }
 
+impl Default for Input {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Input {
     pub fn new() -> Self {
         Self {
@@ -36,10 +42,8 @@ impl Input {
             .unwrap()
             .parse::<T>()
             .ok()
-            .expect(&format!(
-                "Failed to parse input: {}",
-                from_utf8(&self.buf[start..self.pos]).unwrap()
-            ))
+            .unwrap_or_else(|| panic!("Failed to parse input: {}",
+                from_utf8(&self.buf[start..self.pos]).unwrap()))
     }
 
     #[allow(non_snake_case)]
