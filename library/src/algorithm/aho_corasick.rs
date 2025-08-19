@@ -103,8 +103,12 @@ impl AhoCorasick {
         res
     }    
     
-    /* sのsuffixに続く(root node以外へ)遷移する文字の一覧を返す */
-    pub fn destination(&self, s: &String) -> Vec<char> {
+    pub fn node_size(&self) -> usize {
+        self.nodes.len()
+    }
+    
+    /* sのsuffixに続く(root node以外へ)遷移するノード番号の一覧を返す */
+    pub fn destination_node(&self, s: &String) -> Vec<usize> {
         let mut res = Vec::new();
         let mut cur = 0;
         
@@ -121,8 +125,8 @@ impl AhoCorasick {
         }
         
         while cur != 0 {
-            for ch in self.nodes[cur].children.keys() {
-                res.push(*ch);
+            for i in self.nodes[cur].children.values() {
+                res.push(*i);
             }
             cur = self.nodes[cur].failure;
         }
