@@ -1,12 +1,10 @@
 use std::collections::{HashMap, VecDeque};
 
-use crate::utils::iterlibs::dedup::DedupIterator;
-
 #[derive(Debug, Clone)]
-struct Node {
+pub struct Node {
     children: HashMap<char, usize>,
     failure: usize,
-    outputs: Vec<usize>,
+    pub outputs: Vec<usize>,
 }
 
 impl Node {
@@ -20,8 +18,9 @@ impl Node {
 }
 
 pub struct AhoCorasick {
-    nodes: Vec<Node>,
+    pub nodes: Vec<Node>,
     patterns: Vec<String>,
+    goto: Vec<Vec<usize>>,
 }
 
 impl AhoCorasick {
@@ -29,10 +28,12 @@ impl AhoCorasick {
         let mut res = Self {
             nodes: vec![Node::new()],
             patterns: patterns.clone(),
+            goto: Vec::new(),
         };
 
         res.build_trie();
         res.build_failure();
+        res.build_goto();
 
         res
     }
@@ -79,7 +80,31 @@ impl AhoCorasick {
                 }
             }
         }
+    }    
+    
+    
+    /* 遷移先のテーブルを前計算 */
+    fn build_goto(&mut self) {
+        // gotoテーブルのサイズを調整
+        self.goto = vec![vec![0; 26]; self.nodes.len()];
+        
+        for node_id in 0..self.nodes.len() {
+            for (i, c) in ('a'..='z').enumerate() {
+                let mut cur = node_id;
+                
+                while cur != 0 && !self.nodes[cur].children.contains_key(&c) {
+                    cur = self.nodes[cur].failure;
+                }
+
+                if let Some(&nxt) = self.nodes[cur].children.get(&c) {
+                    self.goto[node_id][i] = nxt;
+                } else {
+                    self.goto[node_id][i] = 0;
+                }
+            }
+        }
     }
+    
 
     /* 与えられた文字列に登録されている文字列のうちi番目のものが含まれ、それがj文字目から始まるとき、(i, j)の組を返す */
     pub fn search(&self, s: &String) -> Vec<(usize, usize)> {
@@ -106,10 +131,9 @@ impl AhoCorasick {
     pub fn node_size(&self) -> usize {
         self.nodes.len()
     }
-    
-    /* sのsuffixに続く(root node以外へ)遷移するノード番号の一覧を返す */
-    pub fn destination_node(&self, s: &String) -> Vec<usize> {
-        let mut res = Vec::new();
+
+    /* sのsuffixに遷移するノード番号の一覧を返す */
+    pub fn destination_node_ids_from_str(&self, s: &String) -> Vec<usize> {
         let mut cur = 0;
         
         for ch in s.chars() {
@@ -124,14 +148,11 @@ impl AhoCorasick {
             }
         }
         
-        while cur != 0 {
-            for i in self.nodes[cur].children.values() {
-                res.push(*i);
-            }
-            cur = self.nodes[cur].failure;
-        }
-
-        return res.iter().dedup().copied().collect();
+        self.destination_node_ids_from_id(cur)
+    }
+    
+    pub fn destination_node_ids_from_id(&self, id: usize) -> Vec<usize> {
+        self.goto[id].clone()
     }
 
 }
