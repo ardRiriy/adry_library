@@ -78,7 +78,8 @@ impl Input {
     ) -> Vec<Vec<(usize, T)>> {
         let mut graph = vec![Vec::new(); n];
         for _ in 0..m {
-            let (u, v, w): (usize, usize, T) = self.triple();
+            let (u, v) = self.pair::<usize>();
+            let w = self.next::<T>();
             let u = if is_one_based { u - 1 } else { u };
             let v = if is_one_based { v - 1 } else { v };
             graph[u].push((v, w));
@@ -89,11 +90,15 @@ impl Input {
         graph
     }
 
-    pub fn pair<T: FromStr, U: FromStr>(&mut self) -> (T, U) {
+    pub fn pair<T: FromStr>(&mut self) -> (T, T) {
         (self.next(), self.next())
     }
 
-    pub fn triple<T: FromStr, U: FromStr, V: FromStr>(&mut self) -> (T, U, V) {
+    pub fn triple<T: FromStr>(&mut self) -> (T, T, T) {
         (self.next(), self.next(), self.next())
+    }
+    
+    pub fn chars(&mut self) -> Vec<char> {
+        self.next::<String>().chars().collect::<Vec<_>>()
     }
 }
