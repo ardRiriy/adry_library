@@ -21,7 +21,7 @@ impl Monoid for Mono {
 fn main() {
     let mut lock = stdout().lock();
     let mut input = Input::new();
-    let (n, q) = input.pair::<usize, usize>();
+    let (n, q) = input.pair::<usize>();
     let a = input.vector::<u64>(n);
     let mut seg: SegmentTree<Mono> = SegmentTree::new(n);
 
@@ -32,10 +32,11 @@ fn main() {
     for _ in 0..q {
         let t = input.next::<u8>();
         if t == 0 {
-            let (p, x) = input.pair::<usize, u64>();
+            let p = input.next();
+            let x = input.next::<u64>();
             seg.set(p, seg.get(p..=p) + x);
         } else {
-            let (l, r) = input.pair::<usize, usize>();
+            let (l, r) = input.pair::<usize>();
             let _ = writeln!(lock, "{}", seg.get(l..r));
         }
 

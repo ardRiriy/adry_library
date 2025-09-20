@@ -4,8 +4,8 @@ use library::{graph::dijkstra::Dijkstra, utils::input::Input};
 
 fn main() {
     let mut input = Input::new();
-    let (n, m) = input.pair::<usize, usize>();
-    let (s, t) = input.pair::<usize, usize>();
+    let (n, m) = input.pair::<usize>();
+    let (s, t) = input.pair::<usize>();
     let graph = input.weighted_graph::<i64>(n, m, true, false);
 
     let djk = Dijkstra::new(s, &graph);
