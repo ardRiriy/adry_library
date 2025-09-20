@@ -1,4 +1,4 @@
-// verification-helper: PROBLEM https://judge.yosupo.jp/problem/factorize
+// TODO: verification-helper: PROBLEM https://judge.yosupo.jp/problem/factorize
 // TODO: 正しく実装し直す
 // use std::iter::repeat;
 
