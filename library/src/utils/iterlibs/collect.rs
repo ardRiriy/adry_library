@@ -9,18 +9,8 @@ where
 {
     type Item = I::Item;
     
-    fn collect_vec(mut self) -> Vec<Self::Item> {
-        match self.next() {
-            None => Vec::new(),
-            Some(val) => {
-                let mut res = Vec::new();
-                res.push(val);
-                for item in self  {
-                    res.push(item);
-                }
-                res
-            }
-        }
+    fn collect_vec(self) -> Vec<Self::Item> {
+        self.collect()
     }
 }
 
