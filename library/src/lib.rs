@@ -9,3 +9,4 @@ pub mod mink_sum;
 pub mod misc;
 pub mod utils;
 pub mod zeta_mobius_transform;
+pub mod string;
