@@ -101,7 +101,7 @@ impl Pcg32 {
         let r = match range.end_bound() {
             Bound::Included(&e) => e + T::from_i32(1),
             Bound::Excluded(&e) => e,
-            Bound::Unbounded => panic!("An upper bound is needed"),
+            Bound::Unbounded => panic!("A upper bound is needed"),
         };
         let bound = r - l;
         let threshold = T::wrapping_neg(bound) % bound;
