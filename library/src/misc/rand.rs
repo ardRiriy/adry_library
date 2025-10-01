@@ -96,7 +96,7 @@ impl Pcg32 {
         let l = match range.start_bound() {
             Bound::Included(&s) => s,
             Bound::Excluded(&s) => s + T::from_i32(1),
-            Bound::Unbounded => panic!("An lower bound is needed"),
+            Bound::Unbounded => panic!("A lower bound is needed"),
         };
         let r = match range.end_bound() {
             Bound::Included(&e) => e + T::from_i32(1),
