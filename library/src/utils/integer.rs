@@ -24,6 +24,7 @@ pub trait Integer:
     + Not<Output = Self>
 {
     const MAX: Self;
+    const MIN: Self;
 
     #[inline(always)]
     fn zero() -> Self {
@@ -49,7 +50,7 @@ pub trait Integer:
 
 // 任意の整数プリミティブに実装
 macro_rules! impl_int {
-    ($($t:ty),*) => { $( impl Integer for $t { const MAX: Self = <$t>::MAX; } )* };
+    ($($t:ty),*) => { $( impl Integer for $t { const MAX: Self = <$t>::MAX; const MIN: Self = <$t>::MIN; } )* };
 }
 
 impl_int!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
