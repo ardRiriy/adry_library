@@ -1,8 +1,12 @@
+use std::collections::{BTreeMap, BTreeSet};
+
+use crate::misc::rand::Pcg32;
+
 const MOD: u64 = (1 << 61) - 1;
 pub struct ZobristHash<T> {
-    map: std::collections::BTreeMap<T, u64>,
-    set: std::collections::BTreeSet<u64>,
-    rng: rand::rngs::ThreadRng,
+    map: BTreeMap<T, u64>,
+    set: BTreeSet<u64>,
+    rng: Pcg32,
 }
 
 impl<T: Ord> Default for ZobristHash<T> {
@@ -13,17 +17,14 @@ impl<T: Ord> Default for ZobristHash<T> {
 
 impl<T: Ord> ZobristHash<T> {
     pub fn new() -> Self {
-        use rand::thread_rng;
-        use std::collections::*;
         Self {
             map: BTreeMap::new(),
             set: BTreeSet::new(),
-            rng: thread_rng(),
+            rng: Pcg32::new(),
         }
     }
 
     pub fn get(&mut self, key: T) -> u64 {
-        use rand::Rng;
         if let Some(val) = self.map.get(&key) {
             *val
         } else {
