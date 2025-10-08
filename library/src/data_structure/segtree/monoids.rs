@@ -11,7 +11,7 @@ pub trait Monoid {
 
 pub trait MapMonoid {
     type M: Monoid;
-    type F: Clone+PartialEq+Debug;
+    type F: Clone + PartialEq + Debug;
     fn op(a: &<Self::M as Monoid>::S, b: &<Self::M as Monoid>::S) -> <Self::M as Monoid>::S {
         Self::M::op(*a, *b)
     }
