@@ -1,6 +1,5 @@
 use library::{
-    data_structure::segment_tree::{Monoid, SegmentTree},
-    utils::input::Input,
+    data_structure::segtree::{monoids::Monoid, segment_tree::SegmentTree}, utils::input::Input
 };
 use std::io::{stdout, Write};
 
@@ -39,7 +38,6 @@ fn main() {
             let (l, r) = input.pair::<usize>();
             let _ = writeln!(lock, "{}", seg.get(l..r));
         }
-
-        dbg!(&seg);
     }
 }
+
