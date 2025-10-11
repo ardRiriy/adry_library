@@ -4,3 +4,4 @@ pub mod input;
 pub mod integer;
 pub mod iterlibs;
 pub mod veclibs;
+pub mod versatility_functions;

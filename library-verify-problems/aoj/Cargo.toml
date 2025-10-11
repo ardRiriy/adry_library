@@ -17,3 +17,15 @@ path = "src/warshall_floyd.rs"
 [[bin]]
 name = "divisors"
 path = "src/divisors.rs"
+
+[[bin]]
+name = "RMQ"
+path = "src/rmq.rs"
+
+[[bin]]
+name = "RUQ"
+path = "src/ruq.rs"
+
+[[bin]]
+name = "RAQ"
+path = "src/raq.rs"

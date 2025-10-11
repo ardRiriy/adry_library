@@ -3,11 +3,7 @@ use std::{
     ops::{Bound, RangeBounds},
 };
 
-pub trait Monoid {
-    type S: Copy;
-    fn op(a: Self::S, b: Self::S) -> Self::S;
-    fn id() -> Self::S;
-}
+use crate::data_structure::segtree::monoids::Monoid;
 
 pub struct SegmentTree<T: Monoid> {
     n: usize,
@@ -18,7 +14,7 @@ pub struct SegmentTree<T: Monoid> {
 impl<T: Monoid> SegmentTree<T> {
     pub fn new(len: usize) -> Self {
         let mut n = 1;
-        while n < len {
+        while n <= len {
             n <<= 1;
         }
         let data = vec![T::id(); 2 * n];

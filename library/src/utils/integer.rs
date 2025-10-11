@@ -1,13 +1,13 @@
 use std::{
-    convert::TryFrom,
-    ops::{
+    convert::TryFrom, fmt::Debug, ops::{
         Add, AddAssign, Div, DivAssign, Mul, MulAssign, Not, Rem, RemAssign, Shr, Sub, SubAssign,
-    },
+    }
 };
 
 pub trait Integer:
     Copy
     + Default
+    + Debug
     + Ord
     + Add<Output = Self>
     + AddAssign
