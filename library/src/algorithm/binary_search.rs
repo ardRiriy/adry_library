@@ -1,6 +1,6 @@
 use crate::utils::integer::Integer;
 
-pub fn binary_search<T: Integer>(ok: T, ng: T, f: &dyn Fn(T)->bool) -> T {
+pub fn binary_search<T: Integer, F: Fn(T) -> bool>(ok: T, ng: T, f: F) -> T {
     let mut ok = ok;
     let mut ng = ng;
 
