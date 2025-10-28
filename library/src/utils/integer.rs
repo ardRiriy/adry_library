@@ -46,6 +46,11 @@ pub trait Integer:
             )
         })
     }
+
+    #[inline(always)]
+    fn abs_diff(self, other: Self) -> Self {
+        self.max(other) - self.min(other)
+    }
 }
 
 // 任意の整数プリミティブに実装
