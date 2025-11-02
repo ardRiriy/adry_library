@@ -1,5 +1,5 @@
 use std::{
-    fmt::{self, Debug, Formatter},
+    //fmt::{self, Debug, Formatter},
     ops::{Bound, RangeBounds},
 };
 
@@ -72,60 +72,60 @@ impl<T: Monoid> SegmentTree<T> {
     }
 }
 
-impl<T> Debug for SegmentTree<T>
-where
-    T: Monoid,
-    T::S: Debug,
-{
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        writeln!(f)?;
-        let total = self.data.len() - 1;
-        if total == 0 {
-            return write!(f, "(empty)");
-        }
-
-        let leaves = total.div_ceil(2);
-        debug_assert!(leaves.is_power_of_two());
-        let h = leaves.trailing_zeros() as usize;
-
-        let repr: Vec<String> = self
-            .data
-            .iter()
-            .skip(1)
-            .map(|v| format!("{:?}", v))
-            .collect();
-        let w = repr.iter().map(|s| s.len()).max().unwrap();
-        let sep = 1;
-        let unit = w + sep;
-        let line_len = leaves * unit - sep;
-
-        let mut idx = 0;
-        for d in 0..=h {
-            let nodes = 1 << d;
-            let block = 1 << (h - d);
-            let stride = block * unit;
-            let mut line = vec![' '; line_len];
-
-            for i in 0..nodes {
-                if idx >= repr.len() {
-                    break;
-                }
-                let s = &repr[idx];
-                let center = i * stride + stride / 2;
-                let start = center - s.len() / 2;
-
-                for (j, ch) in s.chars().enumerate() {
-                    let pos = start + j;
-                    if pos < line_len {
-                        line[pos] = ch;
-                    }
-                }
-                idx += 1;
-            }
-            // 右端の余白を落として印字
-            let end = line.iter().rposition(|&c| c != ' ').map_or(0, |p| p + 1);
-            writeln!(f, "{}", line[..end].iter().collect::<String>())?;
-        }
-        Ok(())
-    }
-}
+// impl<T> Debug for SegmentTree<T>
+// where
+//     T: Monoid,
+//     T::S: Debug,
+// {
+//     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+//         writeln!(f)?;
+//         let total = self.data.len() - 1;
+//         if total == 0 {
+//             return write!(f, "(empty)");
+//         }
+//
+//         let leaves = total.div_ceil(2);
+//         debug_assert!(leaves.is_power_of_two());
+//         let h = leaves.trailing_zeros() as usize;
+//
+//         let repr: Vec<String> = self
+//             .data
+//             .iter()
+//             .skip(1)
+//             .map(|v| format!("{:?}", v))
+//             .collect();
+//         let w = repr.iter().map(|s| s.len()).max().unwrap();
+//         let sep = 1;
+//         let unit = w + sep;
+//         let line_len = leaves * unit - sep;
+//
+//         let mut idx = 0;
+//         for d in 0..=h {
+//             let nodes = 1 << d;
+//             let block = 1 << (h - d);
+//             let stride = block * unit;
+//             let mut line = vec![' '; line_len];
+//
+//             for i in 0..nodes {
+//                 if idx >= repr.len() {
+//                     break;
+//                 }
+//                 let s = &repr[idx];
+//                 let center = i * stride + stride / 2;
+//                 let start = center - s.len() / 2;
+//
+//                 for (j, ch) in s.chars().enumerate() {
+//                     let pos = start + j;
+//                     if pos < line_len {
+//                         line[pos] = ch;
+//                     }
+//                 }
+//                 idx += 1;
+//             }
+//             // 右端の余白を落として印字
+//             let end = line.iter().rposition(|&c| c != ' ').map_or(0, |p| p + 1);
+//             writeln!(f, "{}", line[..end].iter().collect::<String>())?;
+//         }
+//         Ok(())
+//     }
+// }
