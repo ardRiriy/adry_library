@@ -2,7 +2,6 @@ use std::{fmt::Debug, marker::PhantomData};
 
 use crate::utils::integer::Integer;
 
-
 pub trait Monoid {
     type S: Copy + Debug;
     fn op(a: Self::S, b: Self::S) -> Self::S;
@@ -23,7 +22,7 @@ pub trait MapMonoid {
     fn composition(f: &Self::F, g: &Self::F) -> Self::F;
 }
 
-pub struct RangeMinMonoid<T> (PhantomData<T>);
+pub struct RangeMinMonoid<T>(PhantomData<T>);
 impl<T: Integer> Monoid for RangeMinMonoid<T> {
     type S = T;
     fn op(a: Self::S, b: Self::S) -> Self::S {
@@ -34,11 +33,24 @@ impl<T: Integer> Monoid for RangeMinMonoid<T> {
     }
 }
 
-pub struct RangeSumMonoid<T> (PhantomData<T>);
+pub struct RangeMaxMonoid<T>(PhantomData<T>);
+impl<T: Integer> Monoid for RangeMaxMonoid<T> {
+    type S = T;
+
+    fn op(a: Self::S, b: Self::S) -> Self::S {
+        a.max(b)
+    }
+
+    fn id() -> Self::S {
+        T::MIN
+    }
+}
+
+pub struct RangeSumMonoid<T>(PhantomData<T>);
 impl<T: Integer> Monoid for RangeSumMonoid<T> {
     type S = T;
     fn op(a: Self::S, b: Self::S) -> Self::S {
-        a+b
+        a + b
     }
     fn id() -> Self::S {
         T::from_i32(0)
