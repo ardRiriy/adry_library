@@ -1,3 +1,4 @@
-pub mod dedup;
-pub mod strs;
 pub mod collect;
+pub mod dedup;
+pub mod sorted;
+pub mod strs;
