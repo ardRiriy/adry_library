@@ -17,7 +17,7 @@ impl<const MOD: u64> Modint<MOD> {
     #[inline]
     fn val_mod<T: Integer>(val: T) -> u64 {
         if val < T::zero() {
-            (val / T::from_u64(MOD) + T::from_u64(MOD)).to_u64()
+            ((val % T::from_u64(MOD) + T::from_u64(MOD)).to_u64()) % MOD
         } else {
             val.to_u64() % MOD
         }
