@@ -1,139 +1,158 @@
-use std::fmt::Display;
+use std::{
+    fmt::{write, Display},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
+};
 
-use crate::math::euclidean::extended_gcd;
+use crate::{math::euclidean::extended_gcd, utils::integer::Integer};
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Modint<const MOD: u64> {
     pub value: u64,
 }
 
 impl<const MOD: u64> Modint<MOD> {
-    pub fn new(value: u64) -> Self {
-        Self { value: value % MOD }
+    pub fn new<T: Integer>(val: T) -> Self {
+        Self {
+            value: Self::val_mod(val),
+        }
     }
 
-    pub fn raw(value: u64) -> Self {
-        Self { value }
-    }
-
-    // mod MODにおけるvalの逆元
-    pub fn inv(val: u64) -> Self {
-        if let Some((x, _, _)) = extended_gcd(val as i128, MOD as i128) {
-            Self::new(x as u64)
+    #[inline]
+    fn val_mod<T: Integer>(val: T) -> u64 {
+        if val < T::zero() {
+            ((val % T::from_u64(MOD) + T::from_u64(MOD)).to_u64()) % MOD
         } else {
-            panic!("No inverse exists for {} in modulo {}", val, MOD);
+            val.to_u64() % MOD
         }
     }
 
-    pub fn pow(self, exp: u32) -> Self {
-        let mut base = self.value;
-        let mut result = Self::new(1);
-        let mut exp = exp;
+    pub fn inv(val: u64) -> Result<Self, ()> {
+        if let Some((x, _, _)) = extended_gcd(val as i64, MOD as i64) {
+            let value = if x < 0 {
+                (x + MOD as i64) as u64
+            } else {
+                x as u64
+            };
+            Ok(Self { value })
+        } else {
+            Err(())
+        }
+    }
 
-        while exp > 0 {
-            if exp & 1 == 1 {
-                result *= base;
+    pub fn pow(&self, k: u32) -> Self {
+        let mut res = Self::new(1);
+        let mut cur = *self;
+        let mut k = k;
+        while k > 0 {
+            if k & 1 == 1 {
+                res *= cur;
             }
-            base *= base;
-            exp >>= 1;
+            cur *= cur;
+            k >>= 1;
         }
-        result
+        res
     }
 }
 
-impl<const MOD: u64> From<Modint<MOD>> for u64 {
-    fn from(val: Modint<MOD>) -> Self {
-        val.value
-    }
-}
-
-impl<const MOD: u64, Rhs> std::ops::Add<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
+impl<const MOD: u64> Add for Modint<MOD> {
     type Output = Self;
-    fn add(self, other: Rhs) -> Self {
-        Self::new(self.value + other.into())
+    fn add(self, rhs: Self) -> Self::Output {
+        Self::new(self.value + rhs.value)
+    }
+}
+impl<const MOD: u64> AddAssign for Modint<MOD> {
+    fn add_assign(&mut self, rhs: Self) {
+        self.value = (self.value + rhs.value) % MOD;
     }
 }
 
-impl<const MOD: u64, Rhs> std::ops::Sub<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
+impl<const MOD: u64> Sub for Modint<MOD> {
     type Output = Self;
-    fn sub(self, other: Rhs) -> Self {
-        Self::new(self.value + MOD - other.into())
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self::new(MOD + self.value - rhs.value)
     }
 }
-
-impl<const MOD: u64, Rhs> std::ops::Mul<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
+impl<const MOD: u64> SubAssign for Modint<MOD> {
+    fn sub_assign(&mut self, rhs: Self) {
+        self.value = (MOD + self.value - rhs.value) % MOD;
+    }
+}
+impl<const MOD: u64> Mul for Modint<MOD> {
     type Output = Self;
-    fn mul(self, other: Rhs) -> Self {
-        Self::new(self.value * other.into())
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self::new(self.value * rhs.value)
     }
 }
-
-impl<const MOD: u64> std::ops::Neg for Modint<MOD> {
+impl<const MOD: u64> MulAssign for Modint<MOD> {
+    fn mul_assign(&mut self, rhs: Self) {
+        self.value = (self.value * rhs.value) % MOD;
+    }
+}
+impl<const MOD: u64> Div for Modint<MOD> {
     type Output = Self;
-    fn neg(self) -> Self {
-        Self::new(MOD - self.value)
+    fn div(self, rhs: Self) -> Self::Output {
+        let rhs_inv = Self::inv(rhs.value).unwrap();
+        self * rhs_inv
+    }
+}
+impl<const MOD: u64> DivAssign for Modint<MOD> {
+    fn div_assign(&mut self, rhs: Self) {
+        let rhs_inv = Self::inv(rhs.value).unwrap();
+        *self = *self * rhs_inv;
     }
 }
 
-impl<Rhs, const MOD: u64> std::ops::AddAssign<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
-    fn add_assign(&mut self, other: Rhs) {
-        self.value = (self.value + other.into()) % MOD;
-    }
-}
-
-impl<Rhs, const MOD: u64> std::ops::SubAssign<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
-    fn sub_assign(&mut self, other: Rhs) {
-        self.value = (self.value + MOD - other.into()) % MOD;
-    }
-}
-
-impl<Rhs, const MOD: u64> std::ops::MulAssign<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
-    fn mul_assign(&mut self, other: Rhs) {
-        self.value = (self.value * other.into()) % MOD;
-    }
-}
-
-impl<Rhs, const MOD: u64> std::ops::Div<Rhs> for Modint<MOD>
-where
-    Rhs: Into<u64>,
-{
+impl<const MOD: u64, T: Integer> Add<T> for Modint<MOD> {
     type Output = Self;
-    fn div(self, other: Rhs) -> Self {
-        let inv = Self::inv(other.into());
-        self * inv
+    fn add(self, rhs: T) -> Self::Output {
+        self + Self::new(rhs)
     }
 }
 
-macro_rules! impl_from_prim {
-    ($($t:ty),*) => {$(
-        impl<const MOD: u64> From<$t> for Modint<MOD> {
-            fn from(x: $t) -> Self {
-                // i128 に拡張してから剰余を取れば負数も安全に扱える
-                let v = (x as i128).rem_euclid(MOD as i128) as u64;
-                Self::new(v)
-            }
-        }
-    )*};
+impl<const MOD: u64, T: Integer> AddAssign<T> for Modint<MOD> {
+    fn add_assign(&mut self, rhs: T) {
+        *self += Self::new(rhs);
+    }
 }
-impl_from_prim!(u8, u16, u32, u64, usize, i8, i16, i32, i64, isize);
+
+impl<const MOD: u64, T: Integer> Sub<T> for Modint<MOD> {
+    type Output = Self;
+    fn sub(self, rhs: T) -> Self::Output {
+        self - Self::new(rhs)
+    }
+}
+
+impl<const MOD: u64, T: Integer> SubAssign<T> for Modint<MOD> {
+    fn sub_assign(&mut self, rhs: T) {
+        *self -= Self::new(rhs);
+    }
+}
+
+impl<const MOD: u64, T: Integer> Mul<T> for Modint<MOD> {
+    type Output = Self;
+    fn mul(self, rhs: T) -> Self::Output {
+        self * Self::new(rhs)
+    }
+}
+
+impl<const MOD: u64, T: Integer> MulAssign<T> for Modint<MOD> {
+    fn mul_assign(&mut self, rhs: T) {
+        *self *= Self::new(rhs);
+    }
+}
+
+impl<const MOD: u64, T: Integer> Div<T> for Modint<MOD> {
+    type Output = Self;
+    fn div(self, rhs: T) -> Self::Output {
+        self / Self::new(rhs)
+    }
+}
+
+impl<const MOD: u64, T: Integer> DivAssign<T> for Modint<MOD> {
+    fn div_assign(&mut self, rhs: T) {
+        *self /= Self::new(rhs);
+    }
+}
 
 impl<const MOD: u64> Display for Modint<MOD> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -157,17 +176,19 @@ mod tests {
     }
 
     #[test]
-    fn test_modint_inv() {
-        let a = Modint::<11>::new(6);
-        let inv_a = Modint::<11>::inv(6);
-        assert_eq!(a * inv_a, Modint::<11>::new(1));
-    }
-
-    #[test]
     fn test_modint_pow() {
         let a = Modint::<11>::new(2);
         assert_eq!(a.pow(3).value, 8);
         assert_eq!(a.pow(10).value, 1);
         assert_eq!(a.pow(20).value, 1);
+    }
+
+    #[test]
+    fn test_modint_div() {
+        assert_eq!(
+            Modint::<11>::new(3) / Modint::<11>::new(2),
+            Modint::<11>::new(7)
+        );
+        assert_eq!(Modint::<11>::new(8) / 2u64, Modint::<11>::new(4));
     }
 }
