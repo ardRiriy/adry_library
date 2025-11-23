@@ -1,4 +1,7 @@
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::{
+    fmt::{write, Display},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
+};
 
 use crate::{math::euclidean::extended_gcd, utils::integer::Integer};
 
@@ -148,6 +151,12 @@ impl<const MOD: u64, T: Integer> Div<T> for Modint<MOD> {
 impl<const MOD: u64, T: Integer> DivAssign<T> for Modint<MOD> {
     fn div_assign(&mut self, rhs: T) {
         *self /= Self::new(rhs);
+    }
+}
+
+impl<const MOD: u64> Display for Modint<MOD> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.value)
     }
 }
 
