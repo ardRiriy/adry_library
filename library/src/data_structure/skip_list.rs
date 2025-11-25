@@ -59,6 +59,13 @@ pub struct SkipList<T> {
 }
 
 impl<T: Copy + Debug> SkipList<T> {
+    /// Creates a new empty skip list.
+    ///
+    /// # Examples
+    /// ```
+    /// let list: SkipList<i32> = SkipList::new();
+    /// assert_eq!(list.len(), 0);
+    /// ```
     pub fn new() -> Self {
         let mut nodes = Vec::with_capacity(1 << HEIGHT);
         let mut head = ElementNode::dummy();
