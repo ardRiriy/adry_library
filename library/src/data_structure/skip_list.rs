@@ -135,11 +135,11 @@ impl<T: Copy + Debug> SkipList<T> {
         let mut is_already_ended = false;
         let mut pcg = Pcg32::new();
         for i in 0..HEIGHT {
-            let is_creat_new_node = i == 0 || (!is_already_ended && pcg.gen_range(0..=1) == 0);
+            let is_create_new_node = i == 0 || (!is_already_ended && pcg.gen_range(0..=1) == 0);
 
             let prev_elm = &self.nodes[self.list[i][target_list[i].0].element_node_idx];
 
-            if is_creat_new_node {
+            if is_create_new_node {
                 let new_list_node_id = self.list[i].len();
                 new_elm_node.list_nodes.push(new_list_node_id);
 
