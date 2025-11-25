@@ -27,7 +27,11 @@ impl ListNode {
     }
 }
 
-static HEIGHT: usize = 25;
+/// Maximum height of the skip list.
+/// This value determines the maximum number of elements the skip list can efficiently handle.
+/// With HEIGHT = 25, the skip list can efficiently store up to 2^25 ≈ 33 million elements,
+/// maintaining O(log N) average time complexity for search, insertion, and deletion operations.
+const HEIGHT: usize = 25;
 
 #[derive(Debug)]
 struct ElementNode<T> {
