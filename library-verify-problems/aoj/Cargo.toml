@@ -29,3 +29,7 @@ path = "src/ruq.rs"
 [[bin]]
 name = "RAQ"
 path = "src/raq.rs"
+
+[[bin]]
+name = "skip-list"
+path = "src/skiplist.rs"
