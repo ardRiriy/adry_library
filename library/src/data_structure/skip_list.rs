@@ -27,7 +27,7 @@ impl ListNode {
     }
 }
 
-static HEIGHT: usize = 25;
+const HEIGHT: usize = 25;
 
 #[derive(Debug)]
 struct ElementNode<T> {
