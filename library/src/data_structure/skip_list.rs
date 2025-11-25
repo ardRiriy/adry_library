@@ -67,7 +67,7 @@ impl<T: Copy + Debug> SkipList<T> {
     /// assert_eq!(list.len(), 0);
     /// ```
     pub fn new() -> Self {
-        let mut nodes = Vec::with_capacity(1 << HEIGHT);
+        let mut nodes = Vec::with_capacity(1 << 10);
         let mut head = ElementNode::dummy();
         head.list_nodes = repeat(0).take(HEIGHT).collect();
         nodes.push(head);
