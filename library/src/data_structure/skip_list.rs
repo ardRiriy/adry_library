@@ -51,6 +51,19 @@ impl<T> ElementNode<T> {
     }
 }
 
+/// A probabilistic data structure that allows O(log n) search, insertion, and deletion on average.
+///
+/// The skip list maintains multiple levels of linked lists to enable efficient operations.
+/// Elements can be accessed, inserted, or deleted by index position.
+///
+/// # Time Complexity
+/// - `get`: O(log n) average
+/// - `insert`: O(log n) average
+/// - `delete`: O(log n) average
+/// - `len`: O(1)
+///
+/// # Space Complexity
+/// O(n) expected, where n is the number of elements in the list.
 #[derive(Debug)]
 pub struct SkipList<T> {
     nodes: Vec<ElementNode<T>>,
