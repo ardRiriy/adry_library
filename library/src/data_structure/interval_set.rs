@@ -2,6 +2,7 @@ use std::{collections::BTreeSet, ops::RangeBounds};
 
 use crate::utils::{chlibs::ChLibs, integer::Integer, versatility_functions::unpack_range};
 
+#[derive(Debug, Clone)]
 pub struct IntervalSet<T: Integer> {
     sum: T,
     set: BTreeSet<(T, T)>,
