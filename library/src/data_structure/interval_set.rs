@@ -66,8 +66,18 @@ impl<T: Integer> IntervalSet<T> {
         let mut removes = vec![];
         let mut add_backs = vec![];
 
+        let start_l = if let Some(inv) = self.set.range(..(l, T::MAX)).last() {
+            if inv.1 < l {
+                l
+            } else {
+                inv.0
+            }
+        } else {
+            l
+        };
+
         let mut sub = T::zero();
-        for inv in self.set.range((l, T::zero())..) {
+        for inv in self.set.range((start_l, T::zero())..) {
             if inv.0 >= r {
                 break;
             }
@@ -113,5 +123,11 @@ impl<T: Integer> IntervalSet<T> {
 
     pub fn covered_length(&self) -> T {
         self.sum
+    }
+}
+
+impl<T: Integer> IntervalSet<T> {
+    pub fn iter(&self) -> impl Iterator<Item = &(T, T)> {
+        self.set.iter()
     }
 }
