@@ -45,7 +45,7 @@ impl<T: Integer> IntervalSet<T> {
                 break;
             }
         }
-        let plus = r - l - sub;
+        let plus = max_r - start_l - sub;
         self.sum += plus;
 
         for iv in removes {
