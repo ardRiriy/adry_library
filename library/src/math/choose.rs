@@ -5,7 +5,7 @@ pub struct ChooseMod<const MOD: u64> {
 }
 
 impl<const MOD: u64> ChooseMod<MOD> {
-    fn new(n: usize) -> Self {
+    pub fn new(n: usize) -> Self {
         let mut v = vec![Modint::new(1); n+1];
 
         for i in 0..n {
