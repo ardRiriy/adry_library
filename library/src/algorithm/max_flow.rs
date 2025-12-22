@@ -10,9 +10,13 @@ pub struct MaxFlow<T> {
 
 impl<T: Integer> MaxFlow<T> {
     pub fn new(n: usize, start_end: Option<(usize, usize)>) -> Self {
-        let (start, end) = start_end.unwrap_or((0, n-1));
+        let (start, end) = start_end.unwrap_or((0, n - 1));
 
-        Self { g: vec![vec![T::from_i32(0); n]; n], start, end }
+        Self {
+            g: vec![vec![T::from_i32(0); n]; n],
+            start,
+            end,
+        }
     }
 
     pub fn add_edge(&mut self, u: usize, v: usize, c: T) {
@@ -21,8 +25,7 @@ impl<T: Integer> MaxFlow<T> {
 
     pub fn execute(&mut self) -> T {
         let n = self.g.len();
-        let sum = self.g[0].iter()
-            .fold(T::from_i32(0), |acc, c| acc + *c);
+        let sum = self.g[0].iter().fold(T::from_i32(0), |acc, c| acc + *c);
 
         let mut dist = vec![T::from_u64(INF); n];
 
@@ -39,22 +42,21 @@ impl<T: Integer> MaxFlow<T> {
                 }
 
                 let mut flow = T::from_u64(INF);
-                for i in 0..path.len()-1 {
-                    flow.chmin(self.g[path[i]][path[i+1]]);
+                for i in 0..path.len() - 1 {
+                    flow.chmin(self.g[path[i]][path[i + 1]]);
                 }
 
-                for i in 0..path.len()-1 {
-                    self.g[path[i]][path[i+1]] -= flow;
-                    self.g[path[i+1]][path[i]] += flow;
+                for i in 0..path.len() - 1 {
+                    self.g[path[i]][path[i + 1]] -= flow;
+                    self.g[path[i + 1]][path[i]] += flow;
                 }
             }
             dist.fill(T::from_u64(INF));
         }
 
-        let d = self.g[0].iter()
-            .fold(T::from_i32(0), |acc, c| acc + *c);
+        let d = self.g[0].iter().fold(T::from_i32(0), |acc, c| acc + *c);
 
-        sum-d
+        sum - d
     }
 
     fn bfs(&self, dist: &mut Vec<T>) {
@@ -63,8 +65,8 @@ impl<T: Integer> MaxFlow<T> {
         que.push_back(self.start);
         while let Some(u) = que.pop_front() {
             for (v, ci) in self.g[u].iter().enumerate() {
-                if ci <= &T::from_i32(0) || dist[v] != T::from_u64(INF) { 
-                    continue; 
+                if ci <= &T::from_i32(0) || dist[v] != T::from_u64(INF) {
+                    continue;
                 }
                 dist[v] = dist[u] + T::from_i32(1);
                 que.push_back(v);
@@ -80,9 +82,9 @@ impl<T: Integer> MaxFlow<T> {
 
         while let Some(u) = stk.pop() {
             for (v, ci) in self.g[u].iter().enumerate() {
-                if parent[v].is_some() || ci <= &T::from_i32(0) || dist[u+1] != dist[v] {
+                if parent[v].is_some() || ci <= &T::from_i32(0) || dist[u + 1] != dist[v] {
                     continue;
-                } 
+                }
                 parent[v] = Some(u);
                 stk.push(v);
             }
@@ -99,6 +101,4 @@ impl<T: Integer> MaxFlow<T> {
         res.reverse();
         res
     }
-
 }
-

@@ -1,9 +1,11 @@
-use std::{ops::{Bound, RangeBounds}, time::{SystemTime, UNIX_EPOCH}};
+use std::{
+    ops::{Bound, RangeBounds},
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 use crate::utils::integer::Integer;
 
 static MUL: u64 = 6_364_136_223_846_793_005;
-
 
 pub trait PcgRandomInt: Integer {
     fn get_random(rng: &mut Pcg32) -> Self;
@@ -32,7 +34,9 @@ impl_pcg_int!(usize, |rng| rng.next_u64() as usize);
 
 impl_pcg_int!(i32, |rng| i32::from_ne_bytes(rng.next_u32().to_ne_bytes()));
 impl_pcg_int!(i64, |rng| i64::from_ne_bytes(rng.next_u64().to_ne_bytes()));
-impl_pcg_int!(i128, |rng| i128::from_ne_bytes(rng.next_u128().to_ne_bytes()));
+impl_pcg_int!(i128, |rng| i128::from_ne_bytes(
+    rng.next_u128().to_ne_bytes()
+));
 
 pub struct Pcg32 {
     state: u64,
@@ -46,10 +50,10 @@ impl Pcg32 {
             .unwrap()
             .as_nanos() as u64;
 
-        let stream_id = &seed as *const u64 as u64;        
+        let stream_id = &seed as *const u64 as u64;
         Self::with_seed(seed, stream_id)
     }
-    
+
     pub fn with_seed(seed: u64, stream_id: u64) -> Self {
         let inc = (stream_id << 1) | 1;
         let state = seed.wrapping_add(inc);
@@ -57,37 +61,35 @@ impl Pcg32 {
         pcg.next();
         pcg
     }
-    
+
     fn next(&mut self) -> u32 {
         let old_state = self.state;
-        self.state = self.state
-            .wrapping_mul(MUL)
-            .wrapping_add(self.inc);
-        
+        self.state = self.state.wrapping_mul(MUL).wrapping_add(self.inc);
+
         let xorshifted = ((old_state >> 18) ^ (old_state >> 27)) as u32;
         let rot = (old_state >> 59) as u32;
-        xorshifted.rotate_right(rot)       
+        xorshifted.rotate_right(rot)
     }
-    
+
     #[inline]
     fn next_u32(&mut self) -> u32 {
         self.next()
     }
-    
+
     #[inline]
     fn next_u64(&mut self) -> u64 {
         let u = self.next_u32() as u64;
         let d = self.next_u32() as u64;
         (u << 32) | d
     }
-    
+
     #[inline]
     fn next_u128(&mut self) -> u128 {
         let u = self.next_u64() as u128;
         let d = self.next_u64() as u128;
         (u << 64) | d
     }
-    
+
     pub fn gen_range<T, R>(&mut self, range: R) -> T
     where
         T: PcgRandomInt,

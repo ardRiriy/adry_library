@@ -80,18 +80,17 @@ impl AhoCorasick {
                 }
             }
         }
-    }    
-    
-    
+    }
+
     /* 遷移先のテーブルを前計算 */
     fn build_goto(&mut self) {
         // gotoテーブルのサイズを調整
         self.goto = vec![vec![0; 26]; self.nodes.len()];
-        
+
         for node_id in 0..self.nodes.len() {
             for (i, c) in ('a'..='z').enumerate() {
                 let mut cur = node_id;
-                
+
                 while cur != 0 && !self.nodes[cur].children.contains_key(&c) {
                     cur = self.nodes[cur].failure;
                 }
@@ -104,7 +103,6 @@ impl AhoCorasick {
             }
         }
     }
-    
 
     /* 与えられた文字列に登録されている文字列のうちi番目のものが含まれ、それがj文字目から始まるとき、(i, j)の組を返す */
     pub fn search(&self, s: &String) -> Vec<(usize, usize)> {
@@ -126,8 +124,8 @@ impl AhoCorasick {
             }
         }
         res
-    }    
-    
+    }
+
     pub fn node_size(&self) -> usize {
         self.nodes.len()
     }
@@ -135,7 +133,7 @@ impl AhoCorasick {
     /* sのsuffixに遷移するノード番号の一覧を返す */
     pub fn destination_node_ids_from_str(&self, s: &String) -> Vec<usize> {
         let mut cur = 0;
-        
+
         for ch in s.chars() {
             while cur != 0 && !self.nodes[cur].children.contains_key(&ch) {
                 cur = self.nodes[cur].failure;
@@ -147,12 +145,11 @@ impl AhoCorasick {
                 continue; // 遷移できない場合はスキップ
             }
         }
-        
+
         self.destination_node_ids_from_id(cur)
     }
-    
+
     pub fn destination_node_ids_from_id(&self, id: usize) -> Vec<usize> {
         self.goto[id].clone()
     }
-
 }

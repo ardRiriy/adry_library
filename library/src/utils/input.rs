@@ -97,7 +97,7 @@ impl Input {
     pub fn triple<T: FromStr>(&mut self) -> (T, T, T) {
         (self.next(), self.next(), self.next())
     }
-    
+
     pub fn chars(&mut self) -> Vec<char> {
         self.next::<String>().chars().collect::<Vec<_>>()
     }
