@@ -7,6 +7,6 @@ pub mod hash;
 pub mod math;
 pub mod mink_sum;
 pub mod misc;
+pub mod strings;
 pub mod utils;
 pub mod zeta_mobius_transform;
-pub mod strings;

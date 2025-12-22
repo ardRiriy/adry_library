@@ -8,7 +8,7 @@ pub trait StrUtilIter {
 impl<I> StrUtilIter for I
 where
     I: Iterator,
-    I::Item: Display
+    I::Item: Display,
 {
     type Item = I::Item;
 
@@ -36,10 +36,10 @@ mod tests {
         let v = vec![1, 2, 3, 4];
         assert_eq!(v.iter().join(" "), "1 2 3 4".to_string());
     }
-    
+
     #[test]
     fn empty() {
-        let v :Vec<i32> = Vec::new();
+        let v: Vec<i32> = Vec::new();
         assert_eq!(v.iter().join(" "), "".to_string());
     }
 }

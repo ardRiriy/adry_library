@@ -29,3 +29,7 @@ path = "src/ruq.rs"
 [[bin]]
 name = "RAQ"
 path = "src/raq.rs"
+
+[[bin]]
+name = "max-flow"
+path = "src/max_flow.rs"
