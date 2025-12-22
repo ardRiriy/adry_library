@@ -1,3 +1,4 @@
+// verification-helper: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_6_A
 use library::{algorithm::max_flow::MaxFlow, utils::input::Input};
 
 fn solve(ip: &mut Input) {
