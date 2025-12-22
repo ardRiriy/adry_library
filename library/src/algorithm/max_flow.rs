@@ -25,7 +25,7 @@ impl<T: Integer> MaxFlow<T> {
 
     pub fn execute(&mut self) -> T {
         let n = self.g.len();
-        let sum = self.g[0].iter().fold(T::from_i32(0), |acc, c| acc + *c);
+        let sum = self.g[self.start].iter().fold(T::from_i32(0), |acc, c| acc + *c);
 
         let mut dist = vec![T::from_u64(INF); n];
 
@@ -37,7 +37,7 @@ impl<T: Integer> MaxFlow<T> {
 
             loop {
                 let path = self.dfs(&dist);
-                if path.is_empty() {
+                if path.len() <= 1 {
                     break;
                 }
 
@@ -54,7 +54,7 @@ impl<T: Integer> MaxFlow<T> {
             dist.fill(T::from_u64(INF));
         }
 
-        let d = self.g[0].iter().fold(T::from_i32(0), |acc, c| acc + *c);
+        let d = self.g[self.start].iter().fold(T::from_i32(0), |acc, c| acc + *c);
 
         sum - d
     }
@@ -82,7 +82,7 @@ impl<T: Integer> MaxFlow<T> {
 
         while let Some(u) = stk.pop() {
             for (v, ci) in self.g[u].iter().enumerate() {
-                if parent[v].is_some() || ci <= &T::from_i32(0) || dist[u + 1] != dist[v] {
+                if parent[v].is_some() || ci <= &T::from_i32(0) || dist[u] + T::from_i32(1) != dist[v] {
                     continue;
                 }
                 parent[v] = Some(u);
@@ -99,6 +99,7 @@ impl<T: Integer> MaxFlow<T> {
         }
 
         res.reverse();
+
         res
     }
 }
