@@ -66,6 +66,8 @@ pub trait Integer:
         self.max(other) - self.min(other)
     }
 
+    fn ilog10(self) -> u32;
+
     fn to_u8(&self) -> u8;
     fn to_u32(&self) -> u32;
     fn to_u64(&self) -> u64;
@@ -105,6 +107,8 @@ macro_rules! impl_int {
             fn to_i128(&self) -> i128 { *self as i128 }
             #[inline]
             fn to_isize(&self) -> isize { *self as isize }
+            #[inline]
+            fn ilog10(self) -> u32 { self.ilog10() }
         } )*
     };
 }

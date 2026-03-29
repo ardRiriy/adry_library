@@ -20,3 +20,27 @@ where
 
     (l, r)
 }
+
+/// 整数に対してその桁数を返却する
+/// 負数に対する結果は不定
+/// # examples
+/// ```
+/// let x: i32 = 0;
+/// assert_eq!(x.digit_count(), 1);
+/// let x: i32 = 100;
+/// assert_eq!(x.digit_count(), 3);
+/// let x: i32 = 12345;
+/// assert_eq!(x.digit_count(), 5);
+/// let x: i32 = -12345;
+/// assert_eq!(x.digit_count(), 5);
+/// ```
+pub fn digit_count<T>(x: T) -> u32
+where
+    T: Integer,
+{
+    if x == T::zero() {
+        1
+    } else {
+        x.ilog10() + 1
+    }
+}
