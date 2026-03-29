@@ -37,3 +37,7 @@ path = "src/max_flow.rs"
 [[bin]]
 name = "dfs"
 path = "src/dfs.rs"
+
+[[bin]]
+name = "bfs"
+path = "src/bfs.rs"

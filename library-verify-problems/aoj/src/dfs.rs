@@ -1,3 +1,4 @@
+// verification-helper: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_11_B&lang=ja
 use library::{
     graph::dfs::{dfs, DfsHandler},
     utils::{
