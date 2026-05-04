@@ -1,4 +1,4 @@
-// verification-helper: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_C&lang=ja
+// verification-helper: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_C&lang=ja
 use library::{graph::scc::Scc, utils::input::Input};
 
 fn solve(ip: &mut Input) {
