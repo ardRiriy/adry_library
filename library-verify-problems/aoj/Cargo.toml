@@ -41,3 +41,7 @@ path = "src/dfs.rs"
 [[bin]]
 name = "bfs"
 path = "src/bfs.rs"
+
+[[bin]]
+name = "scc"
+path = "src/scc.rs"
